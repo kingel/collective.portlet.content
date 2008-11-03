@@ -7,6 +7,8 @@ from zope import schema
 from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
+from plone.app.vocabularies.catalog import SearchableTextSourceBinder
+from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 
 from collective.portlet.content import ContentPortletMessageFactory as _
 
@@ -19,11 +21,10 @@ class IContentPortlet(IPortletDataProvider):
     same.
     """
 
-    content = schema.TextLine(title=_(u"Content to be shown"),
-                              description=_(u"The physical path to the content "
-                                            "object, like /plone/foo/bar"),
-                              required=True)
-
+    content = schema.Choice(title=_(u"Target content object"),
+                            description=_(u"Find the items to show"),
+                            required=True,
+                            source=SearchableTextSourceBinder({}, default_query='path:'))
 
 class Assignment(base.Assignment):
     """Portlet assignment.
@@ -56,8 +57,9 @@ class Renderer(base.Renderer):
     """
     
     def render(self):
-        tool = getToolByName(self.context, 'portal_languages', None)        
-        ob = self.context.unrestrictedTraverse(str(self.data.content))
+        portalpath = getToolByName(self.context, 'portal_url').getPortalPath()
+        ob = self.context.unrestrictedTraverse(portalpath + self.data.content)
+        tool = getToolByName(self.context, 'portal_languages', None)
         if tool is not None:
             lang = tool.getLanguageBindings()[0]
             ob = ob.getTranslation(lang)
@@ -84,3 +86,4 @@ class EditForm(base.EditForm):
     zope.formlib which fields to display.
     """
     form_fields = form.Fields(IContentPortlet)
+    form_fields['content'].custom_widget = UberSelectionWidget
