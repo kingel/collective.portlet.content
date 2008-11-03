@@ -57,8 +57,10 @@ class Renderer(base.Renderer):
     """
     
     def render(self):
+        if not self.data.content:
+            return ''
         portalpath = getToolByName(self.context, 'portal_url').getPortalPath()
-        ob = self.context.unrestrictedTraverse(portalpath + self.data.content)
+        ob = self.context.unrestrictedTraverse(str(portalpath + self.data.content))
         tool = getToolByName(self.context, 'portal_languages', None)
         if tool is not None:
             lang = tool.getLanguageBindings()[0]
