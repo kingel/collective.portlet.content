@@ -37,8 +37,8 @@ class Assignment(base.Assignment):
 
     content = u""
 
-    def __init__(self):
-        pass
+    def __init__(self, content=None):
+        self.content = content
 
     @property
     def title(self):
@@ -76,6 +76,7 @@ class AddForm(base.AddForm):
     constructs the assignment that is being added.
     """
     form_fields = form.Fields(IContentPortlet)
+    form_fields['content'].custom_widget = UberSelectionWidget
 
     def create(self, data):
         return Assignment(**data)
