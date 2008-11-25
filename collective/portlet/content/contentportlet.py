@@ -65,7 +65,7 @@ class Renderer(base.Renderer):
         if tool is not None:
             lang = tool.getLanguageBindings()[0]
             ob = ob.getTranslation(lang)
-        return ob.getText()
+        return ob.getText().decode(ob.getCharset())
 
 
 class AddForm(base.AddForm):

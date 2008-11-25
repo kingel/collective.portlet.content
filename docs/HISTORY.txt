@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1 - 2008-11-25
+----------------
+
+* Fixed a UnicodeDecodeError. [regebro]
+
+
 1.0 - 2008-11-06
 ----------------
 
