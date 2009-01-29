@@ -7,6 +7,8 @@ from zope import schema
 from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
+
+from Products.CMFPlone.interfaces.Translatable import ITranslatable
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 
@@ -62,10 +64,12 @@ class Renderer(base.Renderer):
         portalpath = getToolByName(self.context, 'portal_url').getPortalPath()
         ob = self.context.unrestrictedTraverse(str(portalpath + self.data.content))
         tool = getToolByName(self.context, 'portal_languages', None)
-        if tool is not None:
+        if tool is not None and ITranslatable.isImplementedBy(ob):
             lang = tool.getLanguageBindings()[0]
             ob = ob.getTranslation(lang)
-        return ob.getText().decode(ob.getCharset())
+            return ob.getText().decode(ob.getCharset())
+        
+        return ob.getText()
 
 
 class AddForm(base.AddForm):
