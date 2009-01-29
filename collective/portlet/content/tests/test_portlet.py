@@ -79,7 +79,15 @@ class TestRenderer(TestCase):
 
     def afterSetUp(self):
         self.setRoles(('Manager', ))
-
+        
+        content_tmpl = """<p><a href="%s">Home</a></p>"""
+        
+        # make a document with some realistic content
+        self.portal.invokeFactory('Document', 'quick-links')
+        self.portal['quick-links'].setTitle('Quick Links')
+        self.portal['quick-links'].setText(
+            content_tmpl % self.portal.portal_url())
+    
     def renderer(self, context=None, request=None, view=None, manager=None,
                  assignment=None):
         context = context or self.folder
@@ -87,21 +95,25 @@ class TestRenderer(TestCase):
         view = view or self.folder.restrictedTraverse('@@plone')
         manager = manager or getUtility(
             IPortletManager, name='plone.rightcolumn', context=self.portal)
-
-        # TODO: Pass any default keyword arguments to the Assignment
-        # constructor.
+        
         assignment = assignment or contentportlet.Assignment()
         return getMultiAdapter((context, request, view, manager, assignment),
                                IPortletRenderer)
-
+    
     def test_render(self):
-        # TODO: Pass any keyword arguments to the Assignment constructor.
-        r = self.renderer(context=self.portal,
-                          assignment=contentportlet.Assignment())
+        item_url_path = self.portal['quick-links'].virtual_url_path()
+        portal_url_path = self.portal.virtual_url_path()
+        r = self.renderer(
+            context=self.portal,
+            assignment=contentportlet.Assignment(
+                content=item_url_path[len(portal_url_path):])
+        )
+        
         r = r.__of__(self.folder)
         r.update()
         output = r.render()
-        # TODO: Test output
+        self.failUnless(content_tmpl % self.portal.portal_url() in output)
+    
 
 
 def test_suite():
