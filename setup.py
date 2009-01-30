@@ -23,6 +23,9 @@ setup(name='collective.portlet.content',
       namespace_packages=['collective', 'collective.portlet'],
       include_package_data=True,
       zip_safe=False,
+      extras_require=dict(
+        test=['Products.LinguaPlone',]
+      ),
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
