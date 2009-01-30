@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.3 (svn/unreleased)
+--------------------
+
+* Modification
+  [name of developer]
+
 1.2 - 2009-1-30
 ---------------
 
