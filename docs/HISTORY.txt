@@ -1,9 +1,10 @@
 Changelog
 =========
 
-1.2 (svn/unrelease)
+1.2 - 2009-1-30
+---------------
 
-* Test coverage with translated content via LinguaPlone
+* Test coverage with translated content portlets via LinguaPlone
   [andrewb]
 
 * Improved test coverage over original paster created boilerplate portlet 
