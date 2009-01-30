@@ -6,6 +6,13 @@ from Testing import ZopeTestCase as ztc
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import onsetup
 
+try:
+    import Products.LinguaPlone
+    extensions = ['Products.LinguaPlone:LinguaPlone',]
+except ImportError:
+    extensions = []
+    
+
 @onsetup
 def setup_product():
     """Set up additional products and ZCML required to test this product.
@@ -26,12 +33,14 @@ def setup_product():
     # the ZCML.
 
     ztc.installPackage('collective.portlet.content')
+    ztc.installProduct('LinguaPlone')
 
 # The order here is important: We first call the deferred function and then
 # let PloneTestCase install it during Plone site setup
 
 setup_product()
-ptc.setupPloneSite(products=['collective.portlet.content'])
+ptc.setupPloneSite(products=['collective.portlet.content'], 
+                   extension_profiles=extensions)
 
 class TestCase(ptc.PloneTestCase):
     """Base class used for test cases
