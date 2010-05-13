@@ -8,7 +8,13 @@ from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 
-from Products.CMFPlone.interfaces.Translatable import ITranslatable
+try:
+    from Products.LinguaPlone.interfaces import ITranslatable
+    LINGUAPLONE_SUPPORT = True
+except ImportError:
+    # Linguaplone not installed
+    LINGUAPLONE_SUPPORT = False
+
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
 
@@ -27,6 +33,7 @@ class IContentPortlet(IPortletDataProvider):
                             description=_(u"Find the items to show"),
                             required=True,
                             source=SearchableTextSourceBinder({}, default_query='path:'))
+
 
 class Assignment(base.Assignment):
     """Portlet assignment.
@@ -57,18 +64,19 @@ class Renderer(base.Renderer):
     rendered, and the implicit variable 'view' will refer to an instance
     of this class. Other methods can be added and referenced in the template.
     """
-    
+
     def render(self):
         if not self.data.content:
             return ''
         portalpath = getToolByName(self.context, 'portal_url').getPortalPath()
         ob = self.context.unrestrictedTraverse(str(portalpath + self.data.content))
-        tool = getToolByName(self.context, 'portal_languages', None)
-        if tool is not None and ITranslatable.isImplementedBy(ob):
-            lang = tool.getLanguageBindings()[0]
-            ob = ob.getTranslation(lang)
-            return ob.getText().decode(ob.getCharset())
-        
+        if LINGUAPLONE_SUPPORT:
+            tool = getToolByName(self.context, 'portal_languages', None)
+            if tool is not None and ITranslatable.providedBy(ob):
+                lang = tool.getLanguageBindings()[0]
+                ob = ob.getTranslation(lang) or ob
+                return ob.getText().decode(ob.getCharset())
+
         return ob.getText()
 
 
