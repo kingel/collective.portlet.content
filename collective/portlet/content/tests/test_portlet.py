@@ -112,7 +112,9 @@ class TestRenderer(TestCase):
         r = self.renderer(
             context=self.portal,
             assignment=contentportlet.Assignment(
-                content=self.item_url_path[len(self.portal_url_path):])
+                content=self.item_url_path[len(self.portal_url_path):],
+                item_display=[u'body'],
+            )
         )
         
         r = r.__of__(self.folder)

@@ -1,0 +1,60 @@
+<dl class="portlet portletContent"
+    i18n:domain="collective.portlet.content"
+    tal:condition="nocall:view/content">
+    <dt class="portletHeader">
+        <span tal:define="portlet_title view/data/portlet_title|nothing;"
+            tal:condition="portlet_title"
+            tal:content="portlet_title">
+            Portlet Title
+        </span>
+    </dt>
+    <dd class="portletItem">
+        <h3 class="item-title"
+            tal:condition="python:view.data.title_display in [u'link', u'text']">
+            <a tal:attributes="href view/content/absolute_url;"
+                tal:omit-tag="python:view.data.title_display != u'link'"
+                tal:content="view/content/Title"
+                href="">
+                Item title
+            </a>
+        </h3>
+        <p tal:define="date view/date|nothing;"
+            tal:condition="date"
+            tal:content="python:context.toLocalizedTime(date, long_format=False)"
+            class="item-date">
+            Jan 10, 2010
+        </p>
+        <div class="item-image" 
+            tal:define="image view/image|nothing"
+            tal:condition="image">
+            <a tal:attributes="href view/content/absolute_url;"
+                tal:omit-tag="python:view.data.title_display != u'link'"
+                href="">
+                <img tal:replace="structure image"
+                    src="" />
+            </a>
+        </div>
+        <p tal:define="description view/description|nothing;"
+            tal:condition="description"
+            tal:content="description"
+            class="item-description">
+            Description text
+        </p>
+        <div tal:define="body view/body|nothing;"
+            tal:condition="body"
+            tal:content="structure body">
+            Body text
+        </div>
+        <div class="visualClear"></div>
+    </dd>
+    <dt class="portletFooter">
+        <a class="item-more-link"
+            tal:define="more_text view/data/more_text|nothing;"
+            tal:condition="more_text"
+            tal:content="more_text"
+            tal:attributes="href view/content/absolute_url;"
+            href="">
+            Read more
+        </a>
+    </dt>
+</dl>

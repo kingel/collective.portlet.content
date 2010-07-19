@@ -4,6 +4,9 @@ Changelog
 1.3 (svn/unreleased)
 --------------------
 
+* Added options to display fields other than the body.
+  [yomatters]
+
 * Modification
   [name of developer]
 
