@@ -167,11 +167,13 @@ class Renderer(base.Renderer):
             str(portal_path + self.data.content),
             None
         )
-        
+
         tool = getToolByName(self.context, 'portal_languages', None)
         if tool is not None and ITranslatable.isImplementedBy(item):
             lang = tool.getLanguageBindings()[0]
-            return item.getTranslation(lang)
+            trans_item = item.getTranslation(lang)
+            if trans_item:
+                return trans_item
         return item
 
 class AddForm(base.AddForm):
