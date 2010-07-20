@@ -149,12 +149,8 @@ class Renderer(base.Renderer):
         if not u'body' in self.data.item_display:
             return None
 
-        tool = getToolByName(self.context, 'portal_languages', None)
-        if tool is not None and ITranslatable.isImplementedBy(self.content):
-            lang = tool.getLanguageBindings()[0]
-            ob = self.content.getTranslation(lang)
-            return ob.getText().decode(ob.getCharset())
-        
+        if ITranslatable.isImplementedBy(self.content):
+            return self.content.getText().decode(self.content.getCharset())
         return self.content.getText()
         
     @instance.memoizedproperty
@@ -167,10 +163,16 @@ class Renderer(base.Renderer):
             return None
         
         portal_path = getToolByName(self.context, 'portal_url').getPortalPath()
-        return self.context.restrictedTraverse(
+        item = self.context.restrictedTraverse(
             str(portal_path + self.data.content),
             None
         )
+        
+        tool = getToolByName(self.context, 'portal_languages', None)
+        if tool is not None and ITranslatable.isImplementedBy(item):
+            lang = tool.getLanguageBindings()[0]
+            return item.getTranslation(lang)
+        return item
 
 class AddForm(base.AddForm):
     """Portlet add form.

@@ -8,6 +8,8 @@ from plone.portlets.interfaces import IPortletRenderer
 
 from plone.app.portlets.storage import PortletAssignmentMapping
 
+from DateTime import DateTime
+
 from collective.portlet.content import contentportlet
 
 from collective.portlet.content.tests.base import TestCase
@@ -108,7 +110,7 @@ class TestRenderer(TestCase):
         return getMultiAdapter((context, request, view, manager, assignment),
                                IPortletRenderer)
     
-    def test_render(self):
+    def test_render_body(self):
         r = self.renderer(
             context=self.portal,
             assignment=contentportlet.Assignment(
@@ -122,13 +124,13 @@ class TestRenderer(TestCase):
         output = r.render()
         self.failUnless(self.content_tmpl % self.portal.portal_url() in output)
     
-    def test_i18n_render(self):
+    def test_i18n_render_body(self):
         # determine if we can test this
         try:
             from Products.LinguaPlone.tests.utils import makeTranslation
         except ImportError:
             # oh well, can't test this
-            self.fail("Products.LinguaPlone needed for test_i18n_render")
+            self.fail("Products.LinguaPlone needed for test_i18n_render_body.")
         
         # lingua plone setup
         self.portal.portal_languages.addSupportedLanguage('de')
@@ -146,7 +148,9 @@ class TestRenderer(TestCase):
         r = self.renderer(
             context=self.portal,
             assignment=contentportlet.Assignment(
-                content=self.item_url_path[len(self.portal_url_path):])
+                content=self.item_url_path[len(self.portal_url_path):],
+                item_display=[u'body'],
+            )
         )
         
         r = r.__of__(self.folder)
@@ -154,8 +158,70 @@ class TestRenderer(TestCase):
         output = r.render()
         self.failUnless(self.content_tmpl % self.portal.portal_url() + "DE" \
             in output)
-    
+            
+    def test_render_options(self):
+        ql = self.portal['quick-links']
+        ql.setDescription(u'Quick links description')
+        
+        r = self.renderer(
+            context=self.portal,
+            assignment=contentportlet.Assignment(
+                portlet_title=u'Quick Links Portlet',
+                content=self.item_url_path[len(self.portal_url_path):],
+                title_display=u'link',
+                item_display=[u'date', u'description'],
+                more_text = u'Read more',
+            )
+        )
 
+        r = r.__of__(self.folder)
+        r.update()
+        output = r.render()
+        self.failUnless(u'Quick Links Portlet' in output)
+        self.failUnless(ql.absolute_url() in output)
+        self.failUnless(self.folder.toLocalizedTime(DateTime(), long_format=False) in output)
+        self.failUnless(u'Quick links description' in output)
+        self.failUnless('Read more' in output)
+
+    def test_i18n_render_options(self):
+        # determine if we can test this
+        try:
+            from Products.LinguaPlone.tests.utils import makeTranslation
+        except ImportError:
+            # oh well, can't test this
+            self.fail("Products.LinguaPlone needed for test_i18n_render_options.")
+
+        # lingua plone setup
+        self.portal.portal_languages.addSupportedLanguage('de')
+
+        # now we make a translation
+        self.portal['quick-links'].setLanguage('en')
+        ql_german = makeTranslation(self.portal['quick-links'], 'de')
+        ql_german.setDescription('Quick links description DE')
+
+        #  set the language to German
+        self._setLanguage('de')
+
+
+        r = self.renderer(
+            context=self.portal,
+            assignment=contentportlet.Assignment(
+                portlet_title=u'Quick Links Portlet DE',
+                content=self.item_url_path[len(self.portal_url_path):],
+                title_display=u'link',
+                item_display=[u'date', u'description'],
+                more_text = u'Read more',
+            )
+        )
+
+        r = r.__of__(self.folder)
+        r.update()
+        output = r.render()
+        self.failUnless(u'Quick Links Portlet DE' in output)
+        self.failUnless(ql_german.absolute_url() in output)
+        self.failUnless(self.folder.toLocalizedTime(DateTime(), long_format=False) in output)
+        self.failUnless(u'Quick links description DE' in output)
+        self.failUnless('Read more' in output)
 
 def test_suite():
     from unittest import TestSuite, makeSuite
