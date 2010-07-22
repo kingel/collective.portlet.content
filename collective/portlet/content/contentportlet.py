@@ -65,7 +65,9 @@ class Renderer(base.Renderer):
     of this class. Other methods can be added and referenced in the template.
     """
 
-    def render(self):
+    render = ViewPageTemplateFile('content.pt')
+
+    def text(self):
         if not self.data.content:
             return ''
         portalpath = getToolByName(self.context, 'portal_url').getPortalPath()
