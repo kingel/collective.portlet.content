@@ -5,13 +5,16 @@
     class="portlet portletContent"
     i18n:domain="plone">
 
-    <dt tal:condition="nothing" class="portletHeader">
+    <dt tal:condition="view/data/header" class="portletHeader">
         <span class="portletTopLeft"></span>
         <span>
-           <a class="tile"
+           <!--a class="tile"
               tal:omit-tag="not:view/has_link"
               tal:attributes="href view/data/more_url"
               tal:content="view/data/header"
+              /-->
+           <span class="tile"
+              tal:replace="view/data/header"
               />
         </span>
         <span class="portletTopRight"></span>

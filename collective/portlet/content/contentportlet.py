@@ -41,6 +41,11 @@ class IContentPortlet(IPortletDataProvider):
         required=True,
         default=False)
 
+    header = schema.TextLine(
+        title=_(u"Portlet header"),
+        description=_(u"Title of the rendered portlet"),
+        required=True)
+
 class Assignment(base.Assignment):
     """Portlet assignment.
 
@@ -52,10 +57,12 @@ class Assignment(base.Assignment):
 
     content = u""
     omit_border = False
+    header = u""
 
-    def __init__(self, content=None, omit_border=None):
+    def __init__(self, content=None, omit_border=None, header=None):
         self.content = content
         self.omit_border = omit_border
+        self.header = header
 
     @property
     def title(self):
