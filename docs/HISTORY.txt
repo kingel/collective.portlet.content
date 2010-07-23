@@ -7,7 +7,8 @@ Changelog
 * Added z3c.autoinlude.plugin so we don't need to add zcml to buildout
   [khink]
 
-* Draw a portlet border by default (but allow this to be disabled).
+* Draw a portlet border by default (but allow this to be disabled), containing 
+  a header and a footer which link to the content item.
   [khink]
 
 1.2 - 2009-1-30

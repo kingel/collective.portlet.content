@@ -5,16 +5,12 @@
     class="portlet portletContent"
     i18n:domain="plone">
 
-    <dt tal:condition="view/data/header" class="portletHeader">
+    <dt tal:condition="not:view/data/omit_header" class="portletHeader">
         <span class="portletTopLeft"></span>
         <span>
-           <!--a class="tile"
-              tal:omit-tag="not:view/has_link"
+           <a class="tile"
               tal:attributes="href view/data/more_url"
               tal:content="view/data/header"
-              /-->
-           <span class="tile"
-              tal:replace="view/data/header"
               />
         </span>
         <span class="portletTopRight"></span>
@@ -22,22 +18,21 @@
 
     <dd class="portletItem odd">
         <div tal:replace="structure view/text" />
-        <!--tal:corners condition="not:view/has_footer">
+        <tal:corners condition="not:view/has_footer">
             <span class="portletBottomLeft"></span>
             <span class="portletBottomRight"></span>
-        </tal:corners-->
+        </tal:corners>
     </dd>
     
-    <!--dd class="portletFooter" tal:condition="view/has_footer">
+    <dd class="portletFooter" tal:condition="view/has_footer">
         <span class="portletBottomLeft"></span>
         <span>
            <a class="tile"
-              tal:omit-tag="not:view/has_link"
               tal:attributes="href view/data/more_url"
               tal:content="view/data/footer"
               />
         </span>
         <span class="portletBottomRight"></span>
-    </dd-->
+    </dd>
 
 </dl>

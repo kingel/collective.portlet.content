@@ -36,15 +36,29 @@ class IContentPortlet(IPortletDataProvider):
 
     omit_border = schema.Bool(
         title=_(u"Omit portlet border"),
-        description=_(u"Tick this box if you want to render the text above "
-                      "without the standard header, border or footer."),
+        description=_(u"Tick this box if you want to render the content item "
+                      "selected above without the standard header, border "
+                      "or footer."),
         required=True,
         default=False)
 
-    header = schema.TextLine(
-        title=_(u"Portlet header"),
-        description=_(u"Title of the rendered portlet"),
-        required=True)
+    omit_header = schema.Bool(
+        title=_(u"Omit portlet header"),
+        description=_(u"Tick this box if you want don't want the portlet "
+                        "header to be displayed."),
+        required=True,
+        default=False)
+
+    custom_header = schema.TextLine(
+        title=_(u"Custom portlet header"),
+        description=_(u"Set a custom header for the rendered portlet. Leave "
+                       "empty to use the selected content's title."),
+        required=False)
+
+    footer = schema.TextLine(
+        title=_(u"Portlet footer"),
+        description=_(u"Text to be shown in the footer"),
+        required=False)
 
 class Assignment(base.Assignment):
     """Portlet assignment.
@@ -57,12 +71,17 @@ class Assignment(base.Assignment):
 
     content = u""
     omit_border = False
-    header = u""
+    custom_header = u""
+    footer = u""
+    omit_header = False
 
-    def __init__(self, content=None, omit_border=None, header=None):
+    def __init__(self, content=None, omit_border=None, custom_header=None,
+            footer=None, omit_header=None):
         self.content = content
         self.omit_border = omit_border
-        self.header = header
+        self.custom_header = custom_header
+        self.footer = footer
+        self.omit_header = omit_header
 
     @property
     def title(self):
@@ -82,9 +101,13 @@ class Renderer(base.Renderer):
 
     render = ViewPageTemplateFile('contentportlet.pt')
 
-    def text(self):
+    def __init__(self, context, request, view, manager, data):
+        super(Renderer, self).__init__(context, request, view, manager, data)
+        self._setContentObject() 
+
+    def _setContentObject(self):
         if not self.data.content:
-            return ''
+            return None
         portalpath = getToolByName(self.context, 'portal_url').getPortalPath()
         ob = self.context.unrestrictedTraverse(str(portalpath + self.data.content))
         if LINGUAPLONE_SUPPORT:
@@ -92,10 +115,20 @@ class Renderer(base.Renderer):
             if tool is not None and ITranslatable.providedBy(ob):
                 lang = tool.getLanguageBindings()[0]
                 ob = ob.getTranslation(lang) or ob
-                return ob.getText().decode(ob.getCharset())
 
-        return ob.getText()
+        self._ob = ob
+    
+    def text(self):
+        return self._ob.getText().decode(self._ob.getCharset())
 
+    def more_url(self):
+       return self._ob.absolute_url()
+    
+    def has_footer(self):
+       return bool(self.data.footer)
+
+    def header(self):
+        return self.data.custom_header or self._ob.Title()
 
 class AddForm(base.AddForm):
     """Portlet add form.
