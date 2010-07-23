@@ -1,8 +1,6 @@
 To do
 =====
 
-* Add option to disable portlet border
-
 * Add option to display content item's title in portlet header
 
 * Add option to link to content item (in footer and/or header)

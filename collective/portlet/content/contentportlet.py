@@ -34,6 +34,12 @@ class IContentPortlet(IPortletDataProvider):
                             required=True,
                             source=SearchableTextSourceBinder({}, default_query='path:'))
 
+    omit_border = schema.Bool(
+        title=_(u"Omit portlet border"),
+        description=_(u"Tick this box if you want to render the text above "
+                      "without the standard header, border or footer."),
+        required=True,
+        default=False)
 
 class Assignment(base.Assignment):
     """Portlet assignment.
@@ -45,9 +51,11 @@ class Assignment(base.Assignment):
     implements(IContentPortlet)
 
     content = u""
+    omit_border = False
 
-    def __init__(self, content=None):
+    def __init__(self, content=None, omit_border=None):
         self.content = content
+        self.omit_border = omit_border
 
     @property
     def title(self):
@@ -65,7 +73,7 @@ class Renderer(base.Renderer):
     of this class. Other methods can be added and referenced in the template.
     """
 
-    render = ViewPageTemplateFile('content.pt')
+    render = ViewPageTemplateFile('contentportlet.pt')
 
     def text(self):
         if not self.data.content:

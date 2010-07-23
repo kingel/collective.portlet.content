@@ -4,10 +4,10 @@ Changelog
 1.3 (svn/unreleased)
 --------------------
 
-* Added z3c.autoinlude.plugin so we don't meed to add zcml to buildout
+* Added z3c.autoinlude.plugin so we don't need to add zcml to buildout
   [khink]
 
-* Draw a portlet border
+* Draw a portlet border by default (but allow this to be disabled).
   [khink]
 
 1.2 - 2009-1-30
