@@ -1,5 +1,3 @@
 To do
 =====
 
-* Allow portlet to be removed without having to disable javascript in the
-  browser first
