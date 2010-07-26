@@ -1,8 +1,14 @@
 Changelog
 =========
 
+1.3 (unreleased)
+----------------
+
 1.3rc1 - 2010-07-26
 -------------------
+
+* Plone 4 compatibility (while maintaining Plone 3 compatibility) 
+  [pcaro]
 
 * Added options to display fields other than the body text.
   [yomatters]
