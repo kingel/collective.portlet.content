@@ -85,7 +85,7 @@ class IContentPortlet(IPortletDataProvider):
                 (_(u'Body'), u'body'),
             ]),
         ),
-        default=[u'image', u'description'],
+        default=[u'date', u'image', u'description', u'body'],
         required=False,
     )
     

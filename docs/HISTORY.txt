@@ -4,6 +4,9 @@ Changelog
 1.3 (unreleased)
 ----------------
 
+* Fix duplicate body in template, check all fields by default
+  [khink]
+
 1.3rc1 - 2010-07-26
 -------------------
 

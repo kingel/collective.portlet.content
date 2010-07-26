@@ -56,9 +56,7 @@
           </p>
 
 
-          <div tal:replace="structure body" />
-
-          <div tal:define="body view/body|nothing;"
+          <div
               tal:condition="body"
               tal:content="structure body">
               Body text
