@@ -5,8 +5,9 @@ version = '1.3 (svn/unreleased)'
 
 setup(name='collective.portlet.content',
       version=version,
-      description="A portlet that shows a content item.",
+      description="A Plone portlet that shows a content item.",
       long_description=open("README.txt").read() + "\n" +
+                       open(os.path.join("docs", "TODO.txt")).read() +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[

@@ -1,38 +1,86 @@
-<div tal:condition="view/data/omit_border"
-     class="portletContent"
-     tal:replace="structure view/text" />
-<dl tal:condition="not:view/data/omit_border"
-    class="portlet portletContent"
-    i18n:domain="plone">
+<tal:ifContent tal:condition="nocall:view/content">
+  <tal:defineBody tal:define="body view/body|nothing">
+    <div tal:condition="view/data/omit_border"
+         class="portletContent"
+         tal:replace="structure body" />
+    <dl tal:condition="not:view/data/omit_border"
+        class="portlet portletContent"
+        i18n:domain="plone">
 
-    <dt tal:condition="not:view/data/omit_header" class="portletHeader">
-        <span class="portletTopLeft"></span>
-        <span>
-           <a class="tile"
-              tal:attributes="href view/data/more_url"
-              tal:content="view/data/header"
-              />
-        </span>
-        <span class="portletTopRight"></span>
-    </dt>
+        <dt tal:condition="not:view/data/omit_header" class="portletHeader">
+            <span class="portletTopLeft"></span>
+            <span>
+               <a class="tile"
+                  tal:attributes="href view/data/more_url"
+                  tal:content="view/data/header"
+                  />
+            </span>
+            <span class="portletTopRight"></span>
+        </dt>
 
-    <dd class="portletItem odd">
-        <div tal:replace="structure view/text" />
-        <tal:corners condition="not:view/has_footer">
-            <span class="portletBottomLeft"></span>
-            <span class="portletBottomRight"></span>
-        </tal:corners>
-    </dd>
-    
-    <dd class="portletFooter" tal:condition="view/has_footer">
-        <span class="portletBottomLeft"></span>
-        <span>
-           <a class="tile"
-              tal:attributes="href view/data/more_url"
-              tal:content="view/data/footer"
-              />
-        </span>
-        <span class="portletBottomRight"></span>
-    </dd>
+        <dd class="portletItem odd">
 
-</dl>
+          <h3 class="item-title"
+              tal:condition="python:view.data.title_display in [u'link', u'text']">
+            <a tal:attributes="href view/content/absolute_url;"
+                tal:omit-tag="python:view.data.title_display != u'link'"
+                tal:content="view/content/Title"
+                href="">
+              Item title
+            </a>
+          </h3>
+
+          <p tal:define="date view/date|nothing;"
+              tal:condition="date"
+              tal:content="python:context.toLocalizedTime(date, long_format=False)"
+              class="item-date">
+              Jan 10, 2010
+          </p>
+
+          <div class="item-image" 
+              tal:define="image view/image|nothing"
+              tal:condition="image">
+              <a tal:attributes="href view/content/absolute_url;"
+                  tal:omit-tag="python:view.data.title_display != u'link'"
+                  href="">
+                  <img tal:replace="structure image"
+                      src="" />
+              </a>
+          </div>
+
+          <p tal:define="description view/description|nothing;"
+              tal:condition="description"
+              tal:content="description"
+              class="item-description">
+              Description text
+          </p>
+
+
+          <div tal:replace="structure body" />
+
+          <div tal:define="body view/body|nothing;"
+              tal:condition="body"
+              tal:content="structure body">
+              Body text
+          </div>
+
+          <tal:corners condition="not:view/has_footer">
+              <span class="portletBottomLeft"></span>
+              <span class="portletBottomRight"></span>
+          </tal:corners>
+        </dd>
+        
+        <dd class="portletFooter" tal:condition="view/has_footer">
+          <span class="portletBottomLeft"></span>
+          <span>
+             <a class="tile"
+                tal:attributes="href view/data/more_url"
+                tal:content="view/data/more_text"
+                />
+          </span>
+          <span class="portletBottomRight"></span>
+        </dd>
+
+    </dl>
+  </tal:defineBody>
+</tal:ifContent>

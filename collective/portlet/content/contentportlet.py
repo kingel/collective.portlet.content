@@ -5,6 +5,7 @@ from plone.app.portlets.portlets import base
 
 from zope import schema
 from zope.formlib import form
+from zope.schema.vocabulary import SimpleVocabulary
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 
@@ -17,9 +18,10 @@ except ImportError:
 
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.app.form.widgets.uberselectionwidget import UberSelectionWidget
+from plone.app.controlpanel.widgets import MultiCheckBoxVocabularyWidget
+from plone.memoize import instance
 
 from collective.portlet.content import ContentPortletMessageFactory as _
-
 
 class IContentPortlet(IPortletDataProvider):
     """A portlet
@@ -28,11 +30,72 @@ class IContentPortlet(IPortletDataProvider):
     data that is being rendered and the portlet assignment itself are the
     same.
     """
+    
+    portlet_title = schema.TextLine(
+        title=_(u'Portlet Title'),
+        description=_(u'Enter a title for this portlet. '
+                       "This property is used as the portlet's title in "
+                       'the "@@manage-portlets" screen. '
+                       'Leave blank for "Content Portlet".'),
+        required=False,
+    )
 
-    content = schema.Choice(title=_(u"Target content object"),
-                            description=_(u"Find the items to show"),
-                            required=True,
-                            source=SearchableTextSourceBinder({}, default_query='path:'))
+    custom_header = schema.TextLine(
+        title=_(u"Portlet header"),
+        description=_(u"Set a custom header (title) for the rendered portlet. "
+                       "Leave empty to use the selected content's title."),
+        required=False,
+    )
+
+    title_display = schema.Choice(
+        title=_(u'Item Title in portlet content'),
+        description = _(u"Do you want to render the item's title inside the "
+                         "portlet content, and if yes, how?"
+                         "Note that by default, the item's title will be "
+                         "displayed in the portlet header."),
+        vocabulary=SimpleVocabulary.fromItems([
+            (_(u'Hidden'), u'hidden'),
+            (_(u'Display as text'), u'text'),
+            (_(u'Display as a link'), u'link'),
+        ]),
+        default=u'hidden',
+        required=True,
+    )
+
+    content = schema.Choice(title=_(u"Content Item"),
+        required=True,
+        source=SearchableTextSourceBinder(
+            {},
+            default_query='path:'
+        )
+    )
+                            
+   
+    item_display = schema.List(
+        title=_(u'Item Display'),
+        description = _(u"Select which of the selected item's fields will "
+                         "be displayed in the portlet's content area. "
+                         "Note that selecting Body (text) will not work for "
+                         "an Image."),
+        value_type=schema.Choice(
+            vocabulary=SimpleVocabulary.fromItems([
+                (_(u'Date'), u'date'),
+                (_(u'Image'), u'image'),
+                (_(u'Description'), u'description'),
+                (_(u'Body'), u'body'),
+            ]),
+        ),
+        default=[u'image', u'description'],
+        required=False,
+    )
+    
+    more_text = schema.TextLine(
+        title=_(u'Read More Link'),
+        description=_(u"Enter the text for the link in the portlet footer. "
+                        "Leave blank for no footer."),
+        default=u'',
+        required=False,
+    )
 
     omit_border = schema.Bool(
         title=_(u"Omit portlet border"),
@@ -49,17 +112,6 @@ class IContentPortlet(IPortletDataProvider):
         required=True,
         default=False)
 
-    custom_header = schema.TextLine(
-        title=_(u"Custom portlet header"),
-        description=_(u"Set a custom header for the rendered portlet. Leave "
-                       "empty to use the selected content's title."),
-        required=False)
-
-    footer = schema.TextLine(
-        title=_(u"Portlet footer"),
-        description=_(u"Text to be shown in the footer"),
-        required=False)
-
 class Assignment(base.Assignment):
     """Portlet assignment.
 
@@ -69,27 +121,33 @@ class Assignment(base.Assignment):
 
     implements(IContentPortlet)
 
-    content = u""
+    portlet_title = u''
+    content = None
+    title_display = u'hidden'
+    item_display = [u'image', u'description']
+    more_text = u''
     omit_border = False
     custom_header = u""
-    footer = u""
     omit_header = False
 
-    def __init__(self, content=None, omit_border=None, custom_header=None,
-            footer=None, omit_header=None):
+    def __init__(self, portlet_title=u'', content=None, title_display=u'link', 
+            item_display=[u'image', u'description'], more_text=u'',
+            omit_border=None, custom_header=None, omit_header=None):
+        self.portlet_title = portlet_title
         self.content = content
         self.omit_border = omit_border
         self.custom_header = custom_header
-        self.footer = footer
         self.omit_header = omit_header
+        self.title_display = title_display
+        self.item_display = item_display
+        self.more_text = more_text
 
     @property
     def title(self):
         """This property is used to give the title of the portlet in the
         "manage portlets" screen.
         """
-        return "Content portlet"
-
+        return self.portlet_title or "Content Portlet"
 
 class Renderer(base.Renderer):
     """Portlet renderer.
@@ -101,34 +159,86 @@ class Renderer(base.Renderer):
 
     render = ViewPageTemplateFile('contentportlet.pt')
 
-    def __init__(self, context, request, view, manager, data):
-        super(Renderer, self).__init__(context, request, view, manager, data)
-        self._setContentObject() 
+    @instance.memoizedproperty
+    def content(self):
+        """
+        Returns the content object or None if it does not exist.
+        """
 
-    def _setContentObject(self):
         if not self.data.content:
             return None
-        portalpath = getToolByName(self.context, 'portal_url').getPortalPath()
-        ob = self.context.unrestrictedTraverse(str(portalpath + self.data.content))
+
+        portal_path = getToolByName(self.context, 'portal_url').getPortalPath()
+        item = self.context.restrictedTraverse(
+            str(portal_path + self.data.content),
+            None
+        )
+
         if LINGUAPLONE_SUPPORT:
             tool = getToolByName(self.context, 'portal_languages', None)
-            if tool is not None and ITranslatable.providedBy(ob):
+            if tool is not None and ITranslatable.isImplementedBy(item):
                 lang = tool.getLanguageBindings()[0]
-                ob = ob.getTranslation(lang) or ob
+                item = item.getTranslation(lang) or item
 
-        self._ob = ob
+        return item
     
-    def text(self):
-        return self._ob.getText().decode(self._ob.getCharset())
+    def date(self):
+        """
+        Returns the item date or None if it should not be displayed.
+        """
+        
+        if not u'date' in self.data.item_display:
+            return None
+            
+        return self.content.Date()
+    
+    def image(self):
+        """
+        Returns the item image or None if it should not be displayed.
+        """
+        
+        if not u'image' in self.data.item_display:
+            return None
+            
+        return self.content.restrictedTraverse('image_thumb', None)
+        
+    def description(self):
+        """
+        Returns the item description or None if it should not be displayed.
+        """
 
+        if not u'description' in self.data.item_display:
+            return None
+
+        return self.content.Description()
+    
+    def body(self):
+        """
+        Returns the body HTML or None if it should not be displayed.
+        (or is not present on the object)
+        """
+        
+        if not u'body' in self.data.item_display:
+            return None
+
+        # Currently nothing stops you from trying to get text from an Image
+        if hasattr(self.content, 'getText'):
+            text = self.content.getText()
+        else:
+            text = None
+
+        return text
+        
+    
     def more_url(self):
-       return self._ob.absolute_url()
+       return self.content.absolute_url()
     
-    def has_footer(self):
-       return bool(self.data.footer)
-
     def header(self):
-        return self.data.custom_header or self._ob.Title()
+        return self.data.custom_header or self.content.Title()
+
+    def has_footer(self):
+       return bool(self.data.more_text)
+
 
 class AddForm(base.AddForm):
     """Portlet add form.
@@ -139,10 +249,10 @@ class AddForm(base.AddForm):
     """
     form_fields = form.Fields(IContentPortlet)
     form_fields['content'].custom_widget = UberSelectionWidget
+    form_fields['item_display'].custom_widget = MultiCheckBoxVocabularyWidget
 
     def create(self, data):
         return Assignment(**data)
-
 
 class EditForm(base.EditForm):
     """Portlet edit form.
@@ -152,3 +262,4 @@ class EditForm(base.EditForm):
     """
     form_fields = form.Fields(IContentPortlet)
     form_fields['content'].custom_widget = UberSelectionWidget
+    form_fields['item_display'].custom_widget = MultiCheckBoxVocabularyWidget
