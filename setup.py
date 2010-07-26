@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.3 (svn/unreleased)'
+version = '1.3rc1'
 
 setup(name='collective.portlet.content',
       version=version,
