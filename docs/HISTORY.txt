@@ -1,14 +1,8 @@
 Changelog
 =========
 
-1.3 (unreleased)
+1.3 (2010-07-29)
 ----------------
-
-* Fix duplicate body in template, check all fields by default
-  [khink]
-
-1.3rc1 - 2010-07-26
--------------------
 
 * Plone 4 compatibility (while maintaining Plone 3 compatibility) 
   [pcaro]
