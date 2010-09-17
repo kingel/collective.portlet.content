@@ -176,7 +176,7 @@ class Renderer(base.Renderer):
 
         if LINGUAPLONE_SUPPORT:
             tool = getToolByName(self.context, 'portal_languages', None)
-            if tool is not None and ITranslatable.isImplementedBy(item):
+            if tool is not None and ITranslatable.providedBy(item):
                 lang = tool.getLanguageBindings()[0]
                 item = item.getTranslation(lang) or item
 

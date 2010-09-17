@@ -1,4 +1,4 @@
-<tal:ifContent tal:condition="nocall:view/content">
+<tal:ifContent tal:condition="python:view.content">
   <tal:defineBody tal:define="body view/body|nothing">
     <div tal:condition="view/data/omit_border"
          class="portletContent"
