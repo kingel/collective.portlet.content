@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4 (unreleased)
+1.4 (2010-11-05)
 ----------------
 
 * Fixed an issue where an image would be attempted coerced to unicode
