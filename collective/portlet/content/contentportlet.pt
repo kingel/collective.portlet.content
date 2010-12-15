@@ -11,8 +11,8 @@
       <span class="portletTopLeft"></span>
       <span>
         <a class="tile"
-           tal:attributes="href view/data/more_url"
-           tal:content="view/data/header"
+           tal:attributes="href view/more_url"
+           tal:content="view/header"
            />
       </span>
       <span class="portletTopRight"></span>
