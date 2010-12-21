@@ -71,7 +71,7 @@
       <span class="portletBottomLeft"></span>
       <span>
         <a class="tile"
-           tal:attributes="href view/data/more_url"
+           tal:attributes="href view/more_url"
            tal:content="view/data/more_text"
            />
       </span>
