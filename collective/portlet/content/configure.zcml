@@ -2,10 +2,22 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="collective.portlet.content">
 
     <five:registerPackage package="." initialize=".initialize" />
+    <i18n:registerTranslations directory="locales" />
+
+    <utility
+	   name="collective.portlet.content.title_display_vocabulary"
+	   component=".vocabularies.TitleDisplayVocabularyFactory"
+	 />
+
+    <utility
+	   name="collective.portlet.content.item_display_vocabulary"
+	   component=".vocabularies.ItemDisplayVocabularyFactory"
+	 />
 
     <genericsetup:registerProfile
        name="default"

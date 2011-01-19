@@ -1,0 +1,124 @@
+# Italian translation for collective.portlet.content
+# Luca Fabbri <luca.fabbri@redturtle.it>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: collective.portlet.content\n"
+"POT-Creation-Date: 2011-01-19 15:59+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: Luca Fabbri <luca.fabbri@redturtle.net>\n"
+"Language-Team: RedTurtle Technology <sviluppoplone@redturtle.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.portlet.content\n"
+
+#: ../vocabularies.py:36
+msgid "Body"
+msgstr "Testo"
+
+#: ../contentportlet.py:65
+msgid "Content Item"
+msgstr "Contenuto"
+
+#: ../contentportlet.py:149
+msgid "Content portlet"
+msgstr "Portlet contenuto"
+
+#: ../vocabularies.py:33
+msgid "Date"
+msgstr "Data"
+
+#: ../vocabularies.py:35
+msgid "Description"
+msgstr "Descrizione"
+
+#: ../vocabularies.py:19
+msgid "Display as a link"
+msgstr "Visualizza come collegamento"
+
+#: ../vocabularies.py:18
+msgid "Display as text"
+msgstr "Visualizza come testo"
+
+#: ../vocabularies.py:17
+msgid "Hidden"
+msgstr "Nascosto"
+
+#: ../vocabularies.py:34
+msgid "Image"
+msgstr "Immagine"
+
+#: ../contentportlet.py:75
+msgid "Item Display"
+msgstr "Visualizzazione"
+
+#: ../contentportlet.py:55
+msgid "Item Title in portlet content"
+msgstr "Titolo del contenuto nella portlet"
+
+#: ../contentportlet.py:98
+msgid "Omit portlet border"
+msgstr "Ometti bordo della portlet"
+
+#: ../contentportlet.py:107
+msgid "Omit portlet header"
+msgstr "Ometti intestazione della portlet"
+
+#: ../contentportlet.py:37
+msgid "Portlet Title"
+msgstr "Titolo portlet"
+
+#: ../contentportlet.py:47
+msgid "Portlet header"
+msgstr "Intestazione portlet"
+
+#: ../contentportlet.py:89
+msgid "Read More Link"
+msgstr "Link \"Leggi il resto\""
+
+#. Default: "Set a custom header (title) for the rendered portlet. Leave empty to use the selected content's title."
+#: ../contentportlet.py:48
+msgid "help_custom_header"
+msgstr ""
+"Imposta una intestazione (titolo) per la portlet.\n"
+"Lascia vuoto per usare il titolo del contenuto."
+
+#. Default: "Select which of the selected item's fields will be displayed in the portlet's content area. Note that selecting Body (text) will not work for an Image."
+#: ../contentportlet.py:76
+msgid "help_item_display"
+msgstr "Seleziona quale dei campi del contenuto saranno visualizzati nell'area della portlet.Nota che selezionare \"Testo\" non funzionerà per una Immagine."
+
+#. Default: "Enter the text for the link in the portlet footer. Leave blank for no footer."
+#: ../contentportlet.py:90
+msgid "help_more_text"
+msgstr "Inserisci il testo del link nel footer. Lascia vuoto per non avere footer."
+
+#. Default: "Tick this box if you want to render the content item selected above without the standard header, border or footer."
+#: ../contentportlet.py:99
+msgid "help_omit_border"
+msgstr "Seleziona se vuoi visualizzare il contenuto selezionato sopra senza la solita intestazione, bordo e footer. "
+
+#. Default: "Tick this box if you don't want the portlet header to be displayed."
+#: ../contentportlet.py:108
+msgid "help_omit_header"
+msgstr "Seleziona se non vuoi che l'intestazione della portlet sia visualizzata."
+
+#. Default: "Enter a title for this portlet. This property is used as the portlet's title in the \"@@manage-portlets\" screen. Leave blank for \"Content portlet\"."
+#: ../contentportlet.py:38
+msgid "help_portlet_title"
+msgstr ""
+"Inserisci un titolo per questa portlet.\n"
+"Questa proprietà è usata come titolo della portlet nella schermata \"@@manage-portlets\".\n"
+"Lascia vuoto per avere \"Portlet contenuto\"."
+
+#. Default: "Do you want to render the item's title inside the portlet content, and if yes, how?\nNote that by default, the item's title will be displayed in the portlet header."
+#: ../contentportlet.py:56
+msgid "help_title_display"
+msgstr ""
+"Vuoi che venga visualizzato il titolo del contenuto dentro alla portlet e, se sì, come?\n"
+"Nota che di base, il titolo del contenuto viene visualizzato nell'instestazione della portlet."
+

@@ -5,7 +5,9 @@ from plone.app.portlets.portlets import base
 
 from zope import schema
 from zope.formlib import form
-from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.app.component.hooks import getSite
+
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 
@@ -33,35 +35,33 @@ class IContentPortlet(IPortletDataProvider):
     
     portlet_title = schema.TextLine(
         title=_(u'Portlet Title'),
-        description=_(u'Enter a title for this portlet. '
-                       "This property is used as the portlet's title in "
-                       'the "@@manage-portlets" screen. '
-                       'Leave blank for "Content Portlet".'),
+        description=_('help_portlet_title',
+                      default=u'Enter a title for this portlet. '
+                               "This property is used as the portlet's title in "
+                               'the "@@manage-portlets" screen. '
+                               'Leave blank for "Content portlet".'),
         required=False,
     )
 
     custom_header = schema.TextLine(
         title=_(u"Portlet header"),
-        description=_(u"Set a custom header (title) for the rendered portlet. "
-                       "Leave empty to use the selected content's title."),
+        description=_('help_custom_header',
+                      default=u"Set a custom header (title) for the rendered portlet. "
+                               "Leave empty to use the selected content's title."),
         required=False,
     )
 
     title_display = schema.Choice(
         title=_(u'Item Title in portlet content'),
-        description = _(u"Do you want to render the item's title inside the "
-                         "portlet content, and if yes, how?"
-                         "Note that by default, the item's title will be "
-                         "displayed in the portlet header."),
-        vocabulary=SimpleVocabulary.fromItems([
-            (_(u'Hidden'), u'hidden'),
-            (_(u'Display as text'), u'text'),
-            (_(u'Display as a link'), u'link'),
-        ]),
+        description = _('help_title_display',
+                        default=u"Do you want to render the item's title inside the "
+                                 "portlet content, and if yes, how?\n"
+                                 "Note that by default, the item's title will be "
+                                 "displayed in the portlet header."),
+        vocabulary='collective.portlet.content.title_display_vocabulary',
         default=u'hidden',
         required=True,
     )
-
     content = schema.Choice(title=_(u"Content Item"),
         required=True,
         source=SearchableTextSourceBinder(
@@ -73,17 +73,13 @@ class IContentPortlet(IPortletDataProvider):
    
     item_display = schema.List(
         title=_(u'Item Display'),
-        description = _(u"Select which of the selected item's fields will "
-                         "be displayed in the portlet's content area. "
-                         "Note that selecting Body (text) will not work for "
-                         "an Image."),
+        description = _('help_item_display',
+                        default=u"Select which of the selected item's fields will "
+                                "be displayed in the portlet's content area. "
+                                "Note that selecting Body (text) will not work for "
+                                "an Image."),
         value_type=schema.Choice(
-            vocabulary=SimpleVocabulary.fromItems([
-                (_(u'Date'), u'date'),
-                (_(u'Image'), u'image'),
-                (_(u'Description'), u'description'),
-                (_(u'Body'), u'body'),
-            ]),
+            vocabulary='collective.portlet.content.item_display_vocabulary',
         ),
         default=[u'date', u'image', u'description', u'body'],
         required=False,
@@ -91,24 +87,27 @@ class IContentPortlet(IPortletDataProvider):
     
     more_text = schema.TextLine(
         title=_(u'Read More Link'),
-        description=_(u"Enter the text for the link in the portlet footer. "
-                        "Leave blank for no footer."),
+        description=_('help_more_text',
+                      default=u"Enter the text for the link in the portlet footer. "
+                               "Leave blank for no footer."),
         default=u'',
         required=False,
     )
 
     omit_border = schema.Bool(
         title=_(u"Omit portlet border"),
-        description=_(u"Tick this box if you want to render the content item "
-                      "selected above without the standard header, border "
-                      "or footer."),
+        description=_('help_omit_border',
+                      default=u"Tick this box if you want to render the content item "
+                               "selected above without the standard header, border "
+                               "or footer."),
         required=True,
         default=False)
 
     omit_header = schema.Bool(
         title=_(u"Omit portlet header"),
-        description=_(u"Tick this box if you want don't want the portlet "
-                        "header to be displayed."),
+        description=_('help_omit_header',
+                      default=u"Tick this box if you don't want the portlet "
+                               "header to be displayed."),
         required=True,
         default=False)
 
@@ -147,7 +146,13 @@ class Assignment(base.Assignment):
         """This property is used to give the title of the portlet in the
         "manage portlets" screen.
         """
-        return self.portlet_title or "Content Portlet"
+        foo = _(u"Content portlet")
+        portal = getSite()
+        translation_service = portal.translation_service
+        msg = translation_service.utranslate(domain='collective.portlet.content',
+                                             msgid=u"Content portlet",
+                                             context=portal)
+        return self.portlet_title or msg
 
 class Renderer(base.Renderer):
     """Portlet renderer.

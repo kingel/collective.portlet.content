@@ -1,0 +1,118 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-01-19 15:59+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.portlet.content\n"
+
+#: ../vocabularies.py:36
+msgid "Body"
+msgstr ""
+
+#: ../contentportlet.py:65
+msgid "Content Item"
+msgstr ""
+
+#: ../contentportlet.py:149
+msgid "Content portlet"
+msgstr ""
+
+#: ../vocabularies.py:33
+msgid "Date"
+msgstr ""
+
+#: ../vocabularies.py:35
+msgid "Description"
+msgstr ""
+
+#: ../vocabularies.py:19
+msgid "Display as a link"
+msgstr ""
+
+#: ../vocabularies.py:18
+msgid "Display as text"
+msgstr ""
+
+#: ../vocabularies.py:17
+msgid "Hidden"
+msgstr ""
+
+#: ../vocabularies.py:34
+msgid "Image"
+msgstr ""
+
+#: ../contentportlet.py:75
+msgid "Item Display"
+msgstr ""
+
+#: ../contentportlet.py:55
+msgid "Item Title in portlet content"
+msgstr ""
+
+#: ../contentportlet.py:98
+msgid "Omit portlet border"
+msgstr ""
+
+#: ../contentportlet.py:107
+msgid "Omit portlet header"
+msgstr ""
+
+#: ../contentportlet.py:37
+msgid "Portlet Title"
+msgstr ""
+
+#: ../contentportlet.py:47
+msgid "Portlet header"
+msgstr ""
+
+#: ../contentportlet.py:89
+msgid "Read More Link"
+msgstr ""
+
+#. Default: "Set a custom header (title) for the rendered portlet. Leave empty to use the selected content's title."
+#: ../contentportlet.py:48
+msgid "help_custom_header"
+msgstr ""
+
+#. Default: "Select which of the selected item's fields will be displayed in the portlet's content area. Note that selecting Body (text) will not work for an Image."
+#: ../contentportlet.py:76
+msgid "help_item_display"
+msgstr ""
+
+#. Default: "Enter the text for the link in the portlet footer. Leave blank for no footer."
+#: ../contentportlet.py:90
+msgid "help_more_text"
+msgstr ""
+
+#. Default: "Tick this box if you want to render the content item selected above without the standard header, border or footer."
+#: ../contentportlet.py:99
+msgid "help_omit_border"
+msgstr ""
+
+#. Default: "Tick this box if you don't want the portlet header to be displayed."
+#: ../contentportlet.py:108
+msgid "help_omit_header"
+msgstr ""
+
+#. Default: "Enter a title for this portlet. This property is used as the portlet's title in the \"@@manage-portlets\" screen. Leave blank for \"Content portlet\"."
+#: ../contentportlet.py:38
+msgid "help_portlet_title"
+msgstr ""
+
+#. Default: "Do you want to render the item's title inside the portlet content, and if yes, how?\nNote that by default, the item's title will be displayed in the portlet header."
+#: ../contentportlet.py:56
+msgid "help_title_display"
+msgstr ""
+

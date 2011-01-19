@@ -1,4 +1,11 @@
-<tal:ifContent tal:condition="nocall:view/content">
+<html tal:omit-tag="" 
+    tal:condition="nocall:view/content"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+	xmlns:metal="http://xml.zope.org/namespaces/metal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+	i18n:domain="collective.portlet.content">
+
   <div tal:condition="view/data/omit_border" class="portletContent">
     <metal:body use-macro="template/macros/body" />
   </div>
@@ -78,4 +85,4 @@
       <span class="portletBottomRight"></span>
     </dd>
   </dl>
-</tal:ifContent>
+</html>

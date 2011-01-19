@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.4 (Unreleased)
+----------------
+
+* Added i18n support [keul]
+
+* Added italian translation [keul]
+
 1.4 (2010-11-05)
 ----------------
 
