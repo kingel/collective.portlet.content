@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4 (Unreleased)
+1.5 (2011-01-21)
 ----------------
 
 * Added i18n support [keul]

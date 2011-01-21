@@ -1,6 +1,5 @@
 To do
 =====
 
-* translations
 * tests
 
