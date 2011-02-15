@@ -146,12 +146,7 @@ class Assignment(base.Assignment):
         """This property is used to give the title of the portlet in the
         "manage portlets" screen.
         """
-        foo = _(u"Content portlet")
-        portal = getSite()
-        translation_service = portal.translation_service
-        msg = translation_service.utranslate(domain='collective.portlet.content',
-                                             msgid=u"Content portlet",
-                                             context=portal)
+        msg = _(u"Content portlet")
         return self.portlet_title or msg
 
 class Renderer(base.Renderer):

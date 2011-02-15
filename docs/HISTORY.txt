@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.6 (2001-02-15)
+----------------
+* Fixed an issue while reordering the portlets when a collective.portlet.content
+  was in place. [sneridagh]
+
 1.5 (2011-01-21)
 ----------------
 
