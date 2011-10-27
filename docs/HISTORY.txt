@@ -1,11 +1,13 @@
 Changelog
 =========
 
-1.7 (unreleased)
+1.7 (2011-10-27)
 ----------------
 
 * use normal Manage Portlets permission instead of cmf.ManagePortal.
   [vangheem]
+* small fix in vocabularies.py to make it compatible with plone4.1 
+  [huub_bouma]
 
 1.6 (2011-02-15)
 ----------------
